@@ -47,6 +47,11 @@ def say_hello(**payload):
     data = payload['data']
     web_client = payload['web_client']
     text = data.get('text', [])
+    user = data['user']
+    print(user)
+    if 'UNRTFC13L' in user:
+        return
+    
     if '@UNRTFC13L' in text and 'restart' in text:
         command = text.split(' ')
         channel_id = data['channel']
@@ -104,10 +109,10 @@ def say_hello(**payload):
         else:
             invalid_command(web_client, channel_id, thread_ts)
     
-    elif '@UNRTFC13L':
-        channel_id = data['channel']
-        thread_ts = data['ts']
-        invalid_command(web_client, channel_id, thread_ts)
+    # elif '@UNRTFC13L':
+    #     channel_id = data['channel']
+    #     thread_ts = data['ts']
+    #     invalid_command(web_client, channel_id, thread_ts)
 
 if __name__ == "__main__":
     logger = logging.getLogger()
