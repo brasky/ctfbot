@@ -78,7 +78,7 @@ def say_hello(**payload):
         thread_ts = data['ts']
         if len(command) == 2:
             challenges = list_challenges()
-            message = ", ".join(challenges)
+            message = "\n".join(challenges)
             web_client.chat_postMessage(
                 channel=channel_id,
                 text=message,
