@@ -34,12 +34,18 @@ def restart_challenge(challenge):
         return False
     return True
 
+def invalid_command(web_client, channel_id, thread_ts):
+    web_client.chat_postMessage(
+        channel=channel_id,
+        text=f"Please use a valid command.",
+        thread_ts=thread_ts
+    )
+
 @slack.RTMClient.run_on(event='message')
 def say_hello(**payload):
     print(payload)
     data = payload['data']
     web_client = payload['web_client']
-    rtm_client = payload['rtm_client']
     text = data.get('text', [])
     if '@UNRTFC13L' in text and 'restart' in text:
         command = text.split(' ')
@@ -67,11 +73,8 @@ def say_hello(**payload):
                     thread_ts=thread_ts
                 )
         else:
-            web_client.chat_postMessage(
-                channel=channel_id,
-                text=f"Please use a valid command.",
-                thread_ts=thread_ts
-            )
+            invalid_command(web_client, channel_id, thread_ts)
+
     elif '@UNRTFC13L' in text and 'list' in text:
         command = text.split(' ')
         channel_id = data['channel']
@@ -84,10 +87,8 @@ def say_hello(**payload):
                 text=message,
                 thread_ts=thread_ts
             )
-
-# slack_token = 'xoxb-619777052614-773933409122-DWqV8g4rewqESAVeWhwJEocu'
-# rtm_client = slack.RTMClient(token=slack_token)
-# rtm_client.start()
+        else:
+            invalid_command(web_client, channel_id, thread_ts)
 
 if __name__ == "__main__":
     logger = logging.getLogger()
