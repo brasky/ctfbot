@@ -103,6 +103,11 @@ def say_hello(**payload):
             )
         else:
             invalid_command(web_client, channel_id, thread_ts)
+    
+    elif '@UNRTFC13L':
+        channel_id = data['channel']
+        thread_ts = data['ts']
+        invalid_command(web_client, channel_id, thread_ts)
 
 if __name__ == "__main__":
     logger = logging.getLogger()
