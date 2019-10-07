@@ -5,7 +5,7 @@ import ssl as ssl_lib
 import certifi
 import subprocess
 
-with open('/home/devadmin/ctfbot/vars.env') as f:
+with open('/home/challenge/ctfbot/vars.env') as f:
     for line in f:
         if 'export' not in line:
             continue
@@ -52,7 +52,7 @@ def say_hello(**payload):
     except:
         return
 
-    if '@UNRTFC13L' in text and 'restart' in text:
+    if '@UP742UDL6' in text and 'restart' in text:
         command = text.split(' ')
         channel_id = data['channel']
         thread_ts = data['ts']
@@ -80,7 +80,7 @@ def say_hello(**payload):
         else:
             invalid_command(web_client, channel_id, thread_ts)
 
-    elif '@UNRTFC13L' in text and 'list' in text:
+    elif '@UP742UDL6' in text and 'list' in text:
         command = text.split(' ')
         channel_id = data['channel']
         thread_ts = data['ts']
@@ -95,12 +95,12 @@ def say_hello(**payload):
         else:
             invalid_command(web_client, channel_id, thread_ts)
 
-    elif '@UNRTFC13L' in text and 'help' in text:
+    elif '@UP742UDL6' in text and 'help' in text:
         command = text.split(' ')
         channel_id = data['channel']
         thread_ts = data['ts']
         if len(command) == 2:
-            message = "list: Shows all running challenges\n\nrestart [challenge]: restarts the specified challenge. May not fix all issues."
+            message = "@ctfbot list: Shows all running challenges\n\n@ctfbot restart [challenge]: restarts the specified challenge. May not fix all issues."
             web_client.chat_postMessage(
                 channel=channel_id,
                 text=message,
@@ -108,8 +108,8 @@ def say_hello(**payload):
             )
         else:
             invalid_command(web_client, channel_id, thread_ts)
-    
-    elif '@UNRTFC13L':
+
+    elif '@UP742UDL6' in text:
         channel_id = data['channel']
         thread_ts = data['ts']
         invalid_command(web_client, channel_id, thread_ts)
