@@ -5,6 +5,16 @@ import ssl as ssl_lib
 import certifi
 import subprocess
 
+with open('/home/devadmin/ctfbot/vars.env') as f:
+    for line in f:
+        if 'export' not in line:
+            continue
+        if line.startswith('#'):
+            continue
+        # Remove leading `export `
+        # then, split name / value pair
+        key, value = line.replace('export ', '', 1).strip().split('=', 1)
+        os.environ[key] = value
 
 def validate_challenge(challenge):
     containers = subprocess.getoutput("docker ps --format '{{.Names}}'").split('\n')
