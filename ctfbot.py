@@ -37,7 +37,7 @@ def restart_challenge(challenge):
 def invalid_command(web_client, channel_id, thread_ts):
     web_client.chat_postMessage(
         channel=channel_id,
-        text=f"Please use a valid command.",
+        text=f"Please use a valid command. Try using @ctfbot help for assistance!",
         thread_ts=thread_ts
     )
 
@@ -82,6 +82,20 @@ def say_hello(**payload):
         if len(command) == 2:
             challenges = list_challenges()
             message = "\n".join(challenges)
+            web_client.chat_postMessage(
+                channel=channel_id,
+                text=message,
+                thread_ts=thread_ts
+            )
+        else:
+            invalid_command(web_client, channel_id, thread_ts)
+
+    elif '@UNRTFC13L' in text and 'help' in text:
+        command = text.split(' ')
+        channel_id = data['channel']
+        thread_ts = data['ts']
+        if len(command) == 2:
+            message = "list: Shows all running challenges\n\nrestart [challenge]: restarts the specified challenge. May not fix all issues."
             web_client.chat_postMessage(
                 channel=channel_id,
                 text=message,
