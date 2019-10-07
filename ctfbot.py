@@ -16,8 +16,11 @@ with open('/home/devadmin/ctfbot/vars.env') as f:
         key, value = line.replace('export ', '', 1).strip().split('=', 1)
         os.environ[key] = value
 
+def list_challenges():
+    return subprocess.getoutput("docker ps --format '{{.Names}}'").split('\n')
+
 def validate_challenge(challenge):
-    containers = subprocess.getoutput("docker ps --format '{{.Names}}'").split('\n')
+    containers = list_challenges()
     if challenge in containers:
         return True
     else:
@@ -38,7 +41,7 @@ def say_hello(**payload):
     web_client = payload['web_client']
     rtm_client = payload['rtm_client']
     text = data.get('text', [])
-    if 'devctfbot' in text and 'restart' in text:
+    if '@UNRTFC13L' in text and 'restart' in text:
         command = text.split(' ')
         channel_id = data['channel']
         thread_ts = data['ts']
@@ -69,6 +72,19 @@ def say_hello(**payload):
                 text=f"Please use a valid command.",
                 thread_ts=thread_ts
             )
+    elif '@UNRTFC13L' in text and 'list' in text:
+        command = text.split(' ')
+        channel_id = data['channel']
+        thread_ts = data['ts']
+        if len(command) == 2:
+            challenges = list_challenges()
+            message = ", ".join(challenges)
+            web_client.chat_postMessage(
+                channel=channel_id,
+                text=message,
+                thread_ts=thread_ts
+            )
+
 # slack_token = 'xoxb-619777052614-773933409122-DWqV8g4rewqESAVeWhwJEocu'
 # rtm_client = slack.RTMClient(token=slack_token)
 # rtm_client.start()
