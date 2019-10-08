@@ -18,18 +18,17 @@ with open('/home/challenge/ctfbot/vars.env') as f:
 
 def get_challenge_ports(challenge):
     challenges = subprocess.getoutput("docker ps --format '{{.Names}}|{{.Ports}}'").split('\n')
-    if challenge in challenges:
-        for running_challenge in challenges:
-            if challenge in running_challenge:
-                ports = running_challenge.split('|')[1]
-                ports = ports.replace('->', ':')
-                ports = ports.split(',')
+    for running_challenge in challenges:
+        if challenge in running_challenge:
+            ports = running_challenge.split('|')[1]
+            ports = ports.replace('->', ':')
+            ports = ports.split(',')
 
-                return ports
-                # ports = ports.replace(':', '')
-                # ports = ports.replace('0.0.0.0', '')
-                # ports = ports.replace('/tcp', '')
-                # ports = ports.split('->')
+            return ports
+            # ports = ports.replace(':', '')
+            # ports = ports.replace('0.0.0.0', '')
+            # ports = ports.replace('/tcp', '')
+            # ports = ports.split('->')
     return []
 
 def kill_challenge(challenge):
