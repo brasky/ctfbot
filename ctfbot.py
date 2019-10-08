@@ -173,6 +173,7 @@ def say_hello(**payload):
         channel_id = data['channel']
         thread_ts = data['ts']
         if len(command) == 3:
+            challenge = command[2]
             if reset_challenge(challenge):
                 web_client.chat_postMessage(
                     channel=channel_id,
@@ -185,7 +186,8 @@ def say_hello(**payload):
                     text=f"Resetting challenge " + challenge + " failed.",
                     thread_ts=thread_ts
                 )
-
+        else:
+            invalid_command(web_client, channel_id, thread_ts)
 
     elif '@UP742UDL6' in text:
         channel_id = data['channel']
