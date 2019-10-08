@@ -16,6 +16,65 @@ with open('/home/challenge/ctfbot/vars.env') as f:
         key, value = line.replace('export ', '', 1).strip().split('=', 1)
         os.environ[key] = value
 
+def get_challenge_ports(challenge):
+    challenges = subprocess.getoutput("docker ps --format '{{.Names}}|{{.Ports}}'").split('\n')
+    if challenge in challenges:
+        for running_challenge in challenges:
+            if challenge in running_challenge:
+                ports = running_challenge.split('|')[1]
+                ports = ports.replace('->', ':')
+                ports = ports.split(',')
+
+                return ports
+                # ports = ports.replace(':', '')
+                # ports = ports.replace('0.0.0.0', '')
+                # ports = ports.replace('/tcp', '')
+                # ports = ports.split('->')
+    return []
+
+def kill_challenge(challenge):
+    try:
+        subprocess.getoutput("docker kill " + challenge)
+    except:
+        return False
+
+# def remove_image(image_name):
+#     try:
+#         subprocess.getoutput("docker rm")
+
+# def build_image(image_name):
+#     pass
+
+def run_challenge(challenge, image_name, ports):
+    try:
+        ports_arg = ''
+        for port in ports:
+            ports_arg += '-p ' + port + ' '
+        subprocess.getoutput("docker run --name "  + challenge + " -d " + ports_arg + image_name)
+    except:
+        return False
+
+def remove_challenge(challenge):
+    try:
+        subprocess.getoutput("docker rm " + challenge)
+    except:
+        return False
+
+def reset_challenge(challenge):
+    if validate_challenge(challenge):
+        try:
+            ports = get_challenge_ports(challenge)
+            image_name = challenge + '-image'
+            kill_challenge(challenge)
+            remove_challenge(challenge)
+            # remove_image(image_name)
+            # build_image(image_name)
+            run_challenge(challenge, image_name, ports)
+            return True
+        except:
+            return False
+    return False
+
 def list_challenges():
     return subprocess.getoutput("docker ps --format '{{.Names}}'").split('\n')
 
@@ -29,7 +88,7 @@ def validate_challenge(challenge):
 def restart_challenge(challenge):
     try:
         restart = subprocess.getoutput("docker restart " + challenge)
-        print(restart)
+        # print(restart)
     except:
         return False
     return True
