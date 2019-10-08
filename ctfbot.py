@@ -158,7 +158,7 @@ def say_hello(**payload):
         channel_id = data['channel']
         thread_ts = data['ts']
         if len(command) == 2:
-            message = "@ctfbot list: Shows all running challenges\n\n@ctfbot restart [challenge]: restarts the specified challenge. May not fix all issues.\n\n@ctfbot reset [challenge]: Destroys and rebuilds challenge. Takes longer but fixes most things."
+            message = "@ctfbot list: Shows all running challenges\n\n@ctfbot restart [challenge]: restarts the specified challenge, but does not touch the filesystem so if you're in the middle of something this is the way to go. \n\n@ctfbot reset [challenge]: Destroys and rebuilds challenge. Everything is reset completely, nothing is spared."
             web_client.chat_postMessage(
                 channel=channel_id,
                 text=message,
